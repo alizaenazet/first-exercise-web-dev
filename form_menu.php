@@ -1,6 +1,20 @@
-<?php session_start();
-include'menu_resto.php';
-?><!doctype html>
+<?php include_once('menu_resto.php')?>
+<?php 
+session_start();
+
+if(isset($_POST['addMenu'])) {
+  $nama = $_POST['namaHidangan'];
+  $harga = $_POST['harga'];
+  $deskripsi = $_POST['deskripsi'];
+  $tempListOfmenus = $_SESSION['listOfMenu'];
+if(addMenu($nama,$harga,$deskripsi)){
+  header("Location: dashboard.php");
+  exit();
+}else{
+  $failAddMessage = '<p>Pastikan nama menu belum terdaftar dan tidak ada salah input <p> <br/> <br/>' ;
+}
+}
+?>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -15,17 +29,8 @@ include'menu_resto.php';
 
 
     <form method="POST">
-      <h2>Tambah menu </h2><?php if(isset($_POST['addMenu'])) {
-            $nama = $_POST['namaHidangan'];
-            $harga = $_POST['harga'];
-            $deskripsi = $_POST['deskripsi'];
-          if(addMenu($nama,$harga,$deskripsi)){
-            header("Location: index.php");
-            exit;
-          }else{
-            $failAddMessage = '<p>Pastikan nama menu belum terdaftar dan tidak ada salah input <p> <br/> <br/>' ;
-          }
-        }?><div class="mb-3">
+      <h2>Tambah menu </h2>
+      <div class="mb-3">
         <?php if (isset($failAddMessage)) {
           echo "<p>".$failAddMessage. "</p>";
         }?><label for="inputNamaHidangan" class="form-label">Nama hidangan</label>
@@ -48,4 +53,4 @@ include'menu_resto.php';
     </form>
     
   </body>
-</html>
+</html><?php exit(); ?>
