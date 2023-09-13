@@ -6,9 +6,12 @@ if(isset($_POST['addMenu'])) {
   $nama = $_POST['namaHidangan'];
   $harga = $_POST['harga'];
   $deskripsi = $_POST['deskripsi'];
-  $tempListOfmenus = $_SESSION['listOfMenu'];
 if(addMenu($nama,$harga,$deskripsi)){
-  header("Location: dashboard.php");
+  try {
+    header("Location: dashboard.php");
+  } catch (\Throwable $th) {
+    echo '<meta http-equiv="refresh" content="0">';    
+  }
   exit();
 }else{
   $failAddMessage = '<p>Pastikan nama menu belum terdaftar dan tidak ada salah input <p> <br/> <br/>' ;

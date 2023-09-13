@@ -3,6 +3,21 @@
   session_start();
   $isSessionNotEmpety = isset($_SESSION['listOfMenu']) && is_array($_SESSION['listOfMenu']) && count($_SESSION['listOfMenu']) > 0;
   $listOfMenus = $isSessionNotEmpety == 1 ? $_SESSION['listOfMenu'] : false;
+
+  if (isset($_GET['delete'])) {
+    $deletedMenu = $_GET['delete'];
+    switch ($deletedMenu) {
+      case 'all':
+        session_unset();
+        header("Location: dashboard.php");
+        break;
+      
+      default:
+        hapusMenu($deletedMenu);
+        header("Location: dashboard.php");
+        break;
+    }
+  }
 ?>
 <html lang="en">
   <head>
@@ -19,7 +34,9 @@
       <a href="http://localhost:8080/form_menu.php">
       <button type="button" class="btn btn-success">Add new menu</button>
       </a>
-      </body>
+      <a href='?delete=all'>
+      <button type='button' class='btn btn-danger'>Delete all menu</button>
+      </a> 
     </div>
     <div>
     <table class="table">
@@ -34,21 +51,20 @@
   <tbody class="table-group-divider">
   <?php
       if ($listOfMenus === false) {
-        echo "<h3>".$listOfMenus."</h3>";
+        echo "<tr>";
         echo "<h3>Menu tidak tersedia </h3>";
+        echo "</tr>";
       }else{
          foreach($listOfMenus as $tempMenu){
     $tempNama = $tempMenu->getName();
     $tempHarga = $tempMenu->getHarga();
     $tempDeskripsi = $tempMenu->getDeskripsi();
-    // echo "<h3>console.log('$tempNama');</h3>";
-    // echo "<script>console.log('$tempHarga');</h3>";
   echo "<tr>
   <th scope='row'>$tempNama</th>
   <td>$tempHarga</td>
   <td>$tempDeskripsi</td>
-  <td><a href='http://localhost:8080/menu_resto.php'>
-  <button type='button' class='btn btn-success'>Success</button>
+  <td><a href='?delete=$tempNama'>
+  <button type='button' class='btn btn-danger'>Success</button>
   </a></td>
   </tr>";
   }

@@ -82,10 +82,9 @@
     }
 
     function hapusMenu($namaMenu){
-        global $menus;
-        if ($menus->deleteMenu($namaMenu)) {
-            $_SESSION['listOfMenu'] = getAllMenu();# code...
-        };
+            $tempCurrentMenus = $_SESSION['listOfMenu'];
+             unset($tempCurrentMenus[$namaMenu]);
+            $_SESSION['listOfMenu'] = $tempCurrentMenus;
     }
     
     function editMenu($menu){
