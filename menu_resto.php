@@ -20,13 +20,13 @@
     }
 
     function getName(){
-        return $this -> namaHidangan;
+        return $this-> namaHidangan;
     }
     function getHarga(){
-        return $this -> harga;
+        return $this-> harga;
     }
     function getDeskripsi(){
-        return $this -> deskripsi;
+        return $this-> deskripsi;
     }
 
 
@@ -34,10 +34,11 @@
 
   class ListofMenus{
     private $menus = array();
+    
 
      function setMenu($menuResto){
         $key = $menuResto->getName();
-        if ($this->menus[$key]) {
+        if (isset($this->menus[$key])) {
             return false;
         }
         $this->menus[$key] = $menuResto;
@@ -45,21 +46,20 @@
     }
 
      function getMenu($namaMenu){
-         $reqMenu = $this->$menus[$namaMenu];
-
-        if( $reqMenu){
+         if(isset($menus[$namaMenu])){
+            $reqMenu = $menus[$namaMenu];
             return $reqMenu;
         }else {
-            return null;
+            return false;
         }
     }
 
      function getAllMenu(){
             $reqMenus = $this->menus;
-        if( $reqMenus){
+        if(isset($reqMenus)){
             return $reqMenus;
         }else {
-            return null;
+            return false;
         }
     }
 
@@ -96,20 +96,23 @@
     
     function addMenu($nama,$harga,$deskripsi){
         global $menus;
-        echo $menus->getMenu($newMenu);
-        if (!$menus->getMenu($newMenu)) {
-            $newMenu = new MenuResto($nama,$harga,$deskripsi);
-            $menus->setMenu($newMenu);
-            $_SESSION['listOfMenu'] = getAllMenu();
-            return true;
+        if ($menus->getMenu($nama) != false){
+            return false;
         }
-        return false;
+        $newMenu = new MenuResto($nama,$harga,$deskripsi);
+        if (!$menus->setMenu($newMenu)) {
+            return false;
+        }
+        $currentTempMenu = $_SESSION['listOfMenu'];
+        $currentTempMenu[$nama] = $newMenu;
+        $_SESSION['listOfMenu'] = $currentTempMenu;
+        return true;
     }
 
     function getAllMenu(){
         global $menus;
-        if ($menus->getAllMenu() !== null) {
+        if ($menus->getAllMenu()) {
             return $menus;
         }
         return false;
-    }?>
+    }
